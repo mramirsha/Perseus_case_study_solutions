@@ -1,4 +1,4 @@
-##Quick Start
+## Quick Start
 ### Deploy all stack using the below command and wait for pulling images and creating containers
 * docker-compose -f stack.yml up -d
 
