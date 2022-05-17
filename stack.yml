@@ -1,0 +1,67 @@
+version: '3.5'
+
+services:
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    healthcheck:
+      test: /usr/bin/pg_isready
+      interval: 5s
+      timeout: 10s
+      retries: 120
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypasswd
+      POSTGRES_DB: postgres
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+       - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    ports:
+      - "5454:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  load_app:
+    build: .
+    networks:
+      - postgres
+    volumes:
+      - .:/usr/src/app/
+    command: "python3 load_to_db.py"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  metabase-app:
+    image: metabase/metabase
+    restart: always
+    ports:
+      - 3001:3000
+    volumes:
+      # declare your mount volume /host/dir:/container/dir
+      - ./metabase.db:/metabase.db
+#    environment:
+#      MB_DB_TYPE: postgres
+#      MB_DB_DBNAME: metabase
+#      MB_DB_PORT: 5432
+#      MB_DB_USER: metabase
+#      MB_DB_PASS: 1234567890
+#      MB_DB_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    links:
+      - postgres
+    networks:
+      - postgres
+
+
+
+networks:
+  postgres:
+
+volumes:
+    postgres:
