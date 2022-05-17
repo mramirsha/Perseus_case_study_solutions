@@ -1,25 +1,13 @@
-# Challenge - Courses and Certificates
+##Quick Start
+### Deploy all stack using the below command and wait for pulling images and creating containers
+* docker-compose -f stack.yml up -d
 
-You are provided with 3 files:
+### Now you can reach Metabase via below link:
+#### host: http://0.0.0.0:3001/
+#### credential:
+* Email: test@gmail.com
+* password: 1qaz!QAZ123
 
-- [users.json](./users.json) - File with fake user data
-- [courses.json](./courses.json) - File with courses data
-- [certificates.json](./certificates.json) - File with data about which users completed which courses and when they started/finished
+After you login you can find the queries in `Perseus Case Study` collection.
 
-## Specs
-
-Given the data you are provided with, we would like you to build:
-
-- A script that loads all 3 data sources into a database structure
-- You provide the sql queries for the following analyzes
-  - average complete time of a course
-  - average amount of users time spent in a course
-  - average amount of users time spent for each course individually
-  - report of fastest vs. slowest users completing a course
-  - amount of certificates per customer
-- Your solution does run in a local docker(-compose) setup
-
-## Bonus points, not mandatory
-
-- You provide a possibility to visualize the data in a ui tool with graphs
-- You provide addtional possibilities of analyzing the data via that ui tool (e.g. which times users start mostly, most frequent used courses, etc.)
+The required queries is available in required_query.sql.
